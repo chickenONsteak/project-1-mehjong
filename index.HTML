@@ -4,18 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="landing-page">
-      <div id="game-title">
-        <div id="action"></div>
+    <div class="container" id="landing-page">
+      <div class="row" id="game-title">Mehjong</div>
+      <div class="row" id="action">
+        <button id="start-button">Start</button>
+        <button id="rules">How to play</button>
       </div>
     </div>
-    <div id="game-start">
+    <div class="container" id="game-start">
       <div></div>
     </div>
   </body>
   <script src="./js/tiles.js"></script>
-  <script src="./js/game.js"></script>
+  <script src="./js/main.js"></script>
 </html>
