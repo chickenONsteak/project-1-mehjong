@@ -22,29 +22,12 @@ const characters = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const dragon = ["hong zhong", "bai ban", "fa cai"];
 const animal = ["cat", "mouse", "rooster", "centipede"];
 
-const suoZi = createTiles(characters, "suo", 4);
-console.log(suoZi);
-// // create character tiles
-// const suoZi = createCharacterTiles("suo");
-// const tongZi = createCharacterTiles("tong");
-// const wanZi = createCharacterTiles("wan");
-// // create dragon tiles
-// const dragon = [
-//   new GenerateBaseTiles("hong zhong", "dragon", 4),
-//   new GenerateBaseTiles("bai ban", "dragon", 4),
-//   new GenerateBaseTiles("fa cai", "dragon", 4),
-// ];
-// // create wind tiles
-// const wind = [
-//   new GenerateBaseTiles("dong", "wind", 4),
-//   new GenerateBaseTiles("nan", "wind", 4),
-//   new GenerateBaseTiles("xi", "wind", 4),
-//   new GenerateBaseTiles("bei", "wind", 4),
-// ];
-// // create animal tiles
-// const animal = [
-//   new GenerateBaseTiles("cat", "animal", 1),
-//   new GenerateBaseTiles("mouse", "animal", 1),
-//   new GenerateBaseTiles("rooster", "animal", 1),
-//   new GenerateBaseTiles("centipede", "animal", 1),
-// ];
+allTiles.push(
+  ...createTiles(characters, "suo", 4),
+  ...createTiles(characters, "tong", 4),
+  ...createTiles(characters, "wan", 4),
+  ...createTiles(dragon, "dragon", 4),
+  ...createTiles(animal, "animal", 1)
+);
+
+export { allTiles };
