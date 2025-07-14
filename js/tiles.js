@@ -33,4 +33,4 @@ allTiles.push(
 );
 
 // note: there are 140 tiles in total here (148 - 8 flowers)
-export { allTiles };
+export { allTiles, characters, winds, dragons, animals };

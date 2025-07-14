@@ -1,26 +1,43 @@
-import { allTiles } from "./tiles.js";
+import { allTiles, characters, winds, dragons, animals } from "./tiles.js";
 
-let player1;
-let player2;
-let player3;
-let player4;
+const players = ["Maddy", "Yen", "Yi Lin", "Shuwei"]; // CONTAINS: consolidated player names
+const assignedRoles = []; // CONTAINS: player order, player names, and assigned wind
 
-// Roll dice and determine which player goes first
+// ROLL DICE AND DETERMINE WHICH PLAYER GOES FIRST
 function rollDice() {
   return Math.ceil(Math.random() * 6);
 }
 
-function compareDiceRoll() {
+function assignWinds() {
+  // FIRSTLY: sort the dice rolls
+  // the human player is always the 1st roller
   const diceRolls = [];
-  for (let i = 1; i <= 4; i++) {
-    const obj = { player: i, roll: rollDice() };
+  for (let i = 0; i < players.length; i++) {
+    const obj = { roller: players[i], rollResults: rollDice() };
     diceRolls.push(obj);
   }
+  diceRolls.sort((a, b) => b.rollResults - a.rollResults);
+  console.log(diceRolls);
 
-  diceRolls.sort((a, b) => b.roll - a.roll);
-  return diceRolls;
+  // NEXT: the order is determined by the roll results, with player1 being the person who rolled the highest
+  for (let i = 0; i < players.length; i++) {
+    let temporary = players[i];
+    players[i] = diceRolls[i].roller;
+    diceRolls[i].roller = temporary;
+  }
+
+  // FINALLY: assign winds to the players
+  for (let i = 0; i < players.length; i++) {
+    const obj = {
+      player: i + 1,
+      playerName: players[i],
+      assignedWind: winds[i],
+    };
+    assignedRoles.push(obj);
+  }
 }
 
+// SHUFFLE THE TILES
 // use Durstenfeld's version of the Fisher-Yates shuffle
 function shuffle(fullSetOfTiles) {
   // note: the condition for the FOR loop to stop = unshuffledIndex > 0
@@ -42,5 +59,5 @@ function shuffle(fullSetOfTiles) {
 
 // function distributeTiles() {}
 
-const arr = compareDiceRoll();
-console.log(arr);
+assignWinds();
+console.log(assignedRoles);
