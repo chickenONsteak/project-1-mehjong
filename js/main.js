@@ -1,5 +1,26 @@
 import { allTiles } from "./tiles.js";
 
+let player1;
+let player2;
+let player3;
+let player4;
+
+// Roll dice and determine which player goes first
+function rollDice() {
+  return Math.ceil(Math.random() * 6);
+}
+
+function compareDiceRoll() {
+  const diceRolls = [];
+  for (let i = 1; i <= 4; i++) {
+    const obj = { player: i, roll: rollDice() };
+    diceRolls.push(obj);
+  }
+
+  diceRolls.sort((a, b) => b.roll - a.roll);
+  return diceRolls;
+}
+
 // use Durstenfeld's version of the Fisher-Yates shuffle
 function shuffle(fullSetOfTiles) {
   // note: the condition for the FOR loop to stop = unshuffledIndex > 0
@@ -19,5 +40,7 @@ function shuffle(fullSetOfTiles) {
   return fullSetOfTiles;
 }
 
-shuffle(allTiles);
-console.log(allTiles);
+// function distributeTiles() {}
+
+const arr = compareDiceRoll();
+console.log(arr);
