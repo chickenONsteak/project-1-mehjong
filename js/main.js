@@ -1,7 +1,7 @@
 import { allTiles, characters, winds, dragons, animals } from "./tiles.js";
 
 const players = ["Maddy", "Yen", "Yi Lin", "Shuwei"]; // CONTAINS: consolidated player names
-const assignedRoles = []; // CONTAINS: player order, player names, and assigned wind
+const playerDetails = []; // CONTAINS: player order, player names, and assigned wind
 
 // ROLL DICE AND DETERMINE WHICH PLAYER GOES FIRST
 function rollDice() {
@@ -17,7 +17,6 @@ function assignWinds() {
     diceRolls.push(obj);
   }
   diceRolls.sort((a, b) => b.rollResults - a.rollResults);
-  console.log(diceRolls);
 
   // NEXT: the order is determined by the roll results, with player1 being the person who rolled the highest
   for (let i = 0; i < players.length; i++) {
@@ -32,8 +31,10 @@ function assignWinds() {
       player: i + 1,
       playerName: players[i],
       assignedWind: winds[i],
+      tilesInHand: [],
+      tai: 0,
     };
-    assignedRoles.push(obj);
+    playerDetails.push(obj);
   }
 }
 
@@ -57,7 +58,36 @@ function shuffle(fullSetOfTiles) {
   return fullSetOfTiles;
 }
 
-// function distributeTiles() {}
+// DISTRIBUTING THE TILES
+function distributeTiles(undrawnTiles) {
+  let lastPlayerHandTiles = playerDetails[playerDetails.length - 1].tilesInHand;
+  while (lastPlayerHandTiles.length < 13) {
+    if (lastPlayerHandTiles.length < 12) {
+      for (let i = 0; i < playerDetails.length; i++) {
+        playerDetails[i].tilesInHand.push(
+          undrawnTiles[0],
+          undrawnTiles[1],
+          undrawnTiles[2],
+          undrawnTiles[3]
+        );
+        undrawnTiles.splice(0, 4);
+      }
+    } else if (lastPlayerHandTiles.length === 12) {
+      for (let i = 0; i < playerDetails.length; i++) {
+        if (i === 0) {
+          playerDetails[i].tilesInHand.push(undrawnTiles[0], undrawnTiles[1]);
+          undrawnTiles.splice(0, 2);
+        } else {
+          playerDetails[i].tilesInHand.push(undrawnTiles[0]);
+          undrawnTiles.splice(0, 2);
+        }
+      }
+    }
+  }
+}
 
 assignWinds();
-console.log(assignedRoles);
+console.log(playerDetails);
+// console.log(allTiles);
+distributeTiles(shuffle(allTiles));
+console.log(playerDetails[0].tilesInHand);

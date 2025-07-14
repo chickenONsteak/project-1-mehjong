@@ -1,8 +1,10 @@
 // Create classes to generate tiles
 class GenerateBaseTiles {
-  constructor(value, suit) {
+  constructor(value, suit, distributed = false, faceUp = false) {
     this.value = value;
     this.suit = suit;
+    this.distributed = distributed;
+    this.faceUp = faceUp;
   }
 }
 
