@@ -37,17 +37,12 @@
   width: 15%;
 }
 
-#game-start {
-  display: flex;
-  height: 100vh;
-  justify-items: center;
-  align-content: center;
-}
-
 #board {
   background-image: url(https://images.unsplash.com/photo-1601370690183-1c7796ecec61?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
   background-repeat: no-repeat;
   background-size: 150%;
+  margin-top: 225px;
+  margin-left: 55px;
   height: 800px;
   width: 800px;
 }
@@ -57,15 +52,15 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  top: 100px;
-  left: 100px;
+  top: 50px;
+  left: 50px;
   font-size: 6rem;
   background-color: yellow;
   height: 140px;
   width: 140px;
 }
 
-.player1-hand {
+.first-hand {
   background-color: #f5deb3;
   position: relative;
   left: 55px;
@@ -73,28 +68,41 @@
   height: 100px;
   width: 910px;
 }
-.player2-hand {
+.second-hand {
   background-color: #f5deb3;
   transform: rotate(90deg);
   position: relative;
-  left: 55px;
+  left: 460px;
+  bottom: 625px;
   margin-top: 10px;
   height: 100px;
   width: 910px;
 }
-.player3-hand {
+.third-hand {
   background-color: #f5deb3;
   position: relative;
-  left: 55px;
+  right: 55px;
+  bottom: 1140px;
   margin-top: 10px;
   height: 100px;
   width: 910px;
 }
-.player4-hand {
+.fourth-hand {
   background-color: #f5deb3;
   position: relative;
-  left: 55px;
+  transform: rotate(90deg);
+  right: 460px;
+  bottom: 735px;
   margin-top: 10px;
   height: 100px;
   width: 910px;
+}
+
+#undistributed-tiles {
+  background-color: green;
+  position: relative;
+  bottom: 1400px;
+  left: 975px;
+  height: 1130px;
+  width: 250px;
 }
