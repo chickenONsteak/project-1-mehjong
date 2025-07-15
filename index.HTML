@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container" id="landing-page">
+    <div class="container" id="landing-page" style="display: none">
       <div class="row">
         <div id="game-title">
           <h1 class="jersey-10-regular">Mehjong</h1>
@@ -44,10 +44,18 @@
         <button id="rules">How to play</button>
       </div>
     </div>
-    <div class="container" id="game-start">
-      <div></div>
+    <div class="container" id="game-start" style="display: block">
+      <div id="board">
+        <h1 class="current-wind">东</h1>
+      </div>
+      <div class="player1-hand"></div>
+      <div class="player2-hand"></div>
+      <div class="player3-hand"></div>
+      <div class="player4-hand"></div>
     </div>
   </body>
   <script src="./js/tiles.js"></script>
-  <script src="./js/main.js"></script>
+  <script src="./js/setup.js"></script>
+  <script src="./js/player-logic.js"></script>
+  <script src="./js/screen.js"></script>
 </html>

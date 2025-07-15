@@ -1,12 +1,4 @@
-import {
-  allTiles,
-  suoZi,
-  tongZi,
-  wanZi,
-  winds,
-  dragons,
-  animals,
-} from "./tiles.js";
+import { allTiles, winds } from "./tiles.js";
 
 const players = ["Maddy", "Yen", "Yi Lin", "Shuwei"]; // CONTAINS: consolidated player names
 const playerDetails = []; // CONTAINS: player order, player names, and assigned wind
@@ -117,10 +109,9 @@ function takeReplacementTiles(undrawnTiles) {
       // total sum of special tiles held by all players — will act as a factor for the switch
       // note: this resets back to 0 after all 4 players have finished their round of "bu"
       let specialTileCount = 0;
-      console.log(currentPlayer.tilesInHand);
       // STEP 1: check player by player for special tiles and push them outside of hand
       // note: loop from the back to prevent skipping over tiles when index shifts
-      for (let j = currentPlayer.tilesInHand.length - 1; j < 0; j--) {
+      for (let j = currentPlayer.tilesInHand.length - 1; j >= 0; j--) {
         // if there are special tiles (animal tiles are 51, 52, 53, and 54), push them to outside of the hand
         if (currentPlayer.tilesInHand[j].tileId >= 51) {
           // update tile property (faceUp) to true
@@ -131,11 +122,9 @@ function takeReplacementTiles(undrawnTiles) {
           // STEP 2: draw the num of tiles pushed out of hand from the end of the undistributed tile
           const buTile = undrawnTiles.pop();
           buTile.distributed = true;
-          buTile.faceUp = true;
           currentPlayer.tilesInHand.push(buTile);
           specialTileCount++;
         }
-        console.log(j);
       }
       // STEP 3: flip back the switch if any of the players had a special tile
       // this is because there is a chance that the "bu" tile might be a special tile again
@@ -144,6 +133,9 @@ function takeReplacementTiles(undrawnTiles) {
       }
     }
   } while (needToBu);
+  for (let i = 0; i < playerDetails.length; i++) {
+    sortHand(playerDetails[i]);
+  }
   return undrawnTiles;
 }
 
@@ -151,21 +143,17 @@ function sortHand(playerInfo) {
   playerInfo.tilesInHand.sort((a, b) => a.tileId - b.tileId);
 }
 
-// function checkWinner {
-
-// }
-
 assignWinds();
 // console.log(playerDetails);
 const shuffledTiles = shuffle(allTiles);
 let undistributedTiles = distributeTiles(shuffledTiles);
 for (let i = 0; i < playerDetails.length; i++) {
   sortHand(playerDetails[i]);
-  //   console.log(playerDetails[i].tilesInHand);
+  console.log(playerDetails[i].tilesInHand);
 }
 undistributedTiles = takeReplacementTiles(undistributedTiles);
-// console.log(undistributedTiles);
-// for (let i = 0; i < playerDetails.length; i++) {
-//   console.log(playerDetails[i].tilesInHand);
-//   console.log(playerDetails[i].tilesOutsideHand);
-// }
+console.log(undistributedTiles);
+for (let i = 0; i < playerDetails.length; i++) {
+  console.log(playerDetails[i].tilesInHand);
+  console.log(playerDetails[i].tilesOutsideHand);
+}
