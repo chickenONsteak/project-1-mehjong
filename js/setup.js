@@ -22,14 +22,12 @@ function assignWinds() {
       document.querySelector(`#result${i + 1}`).innerText = obj.rollResults;
     }, 500);
   }
-  diceRolls.sort((a, b) => b.rollResults - a.rollResults);
-
   // STEP 2: the order is determined by the roll results, with player1 being the person who rolled the highest
+  diceRolls.sort((a, b) => b.rollResults - a.rollResults);
   for (let i = 0; i < players.length; i++) {
     let temporary = players[i];
     players[i] = diceRolls[i].roller;
     diceRolls[i].roller = temporary;
-    console.log(players[i]);
   }
 
   // STEP 3: assign winds to the players
@@ -40,28 +38,66 @@ function assignWinds() {
       assignedWind: winds[i],
       tilesInHand: [],
       tilesOutsideHand: [],
+      specialTiles: [],
       tai: 0,
     };
     playerDetails.push(obj);
   }
   // STEP 4: display wind AND turn number
-  while (document.querySelector("#result4") === "") {
-    let maddysPosition;
-    for (let i = 0; i < players.length; i++) {
-      if (players[i] === "Maddy") {
-        setTimeout(() => {
-          maddysPosition = i + 1;
-          document.querySelector("#result1").innerText = windsInChinese[i];
-          document.querySelector("#turn-order1").innerText = maddysPosition;
-        }, 2500);
-      } else {
-        setTimeout(() => {
-          document.querySelector(`#result${i + 1}`).innerText =
-            windsInChinese[i];
-        }, 2500);
-      }
-    }
+  // firstly, find out what position is Maddy — this is because we want to lock Maddy as the first hand (player's hand)
+  let handUICounter = 1; // Maddy is anchored as first hand
+  const maddysIndex = players.indexOf("Maddy");
+  setTimeout(() => {
+    document.querySelector("#result1").innerText = windsInChinese[maddysIndex];
+    document.querySelector("#turn-order1").innerText = maddysIndex + 1;
+  }, 2500);
+  setTimeout(() => {
+    document.querySelector("#result1").innerText = "Maddy";
+  }, 5000);
+  // finally, populate players before AND after Maddy (if she's not the player to go first / last respectively)
+  // populating players to the right of Maddy
+  for (let i = maddysIndex + 1; i < players.length; i++) {
+    handUICounter++;
+    // due to setTimeout being an async function, created uiPosition to lock in the handUICounter for each iteration
+    const uiPosition = handUICounter;
+    setTimeout(() => {
+      document.querySelector(`#result${uiPosition}`).innerText =
+        windsInChinese[i];
+      document.querySelector(`#turn-order${uiPosition}`).innerText = i + 1;
+    }, 2500);
+    setTimeout(() => {
+      document.querySelector(`#result${uiPosition}`).innerText = players[i];
+    }, 5000);
   }
+  // populating players to the left of Maddy
+  for (let i = maddysIndex - 1; i >= 0; i--) {
+    handUICounter++;
+    // due to setTimeout being an async function, created uiPosition to lock in the handUICounter for each iteration
+    const uiPosition = handUICounter;
+    setTimeout(() => {
+      document.querySelector(`#result${uiPosition}`).innerText =
+        windsInChinese[i];
+      document.querySelector(`#turn-order${uiPosition}`).innerText = i + 1;
+    }, 2500);
+    setTimeout(() => {
+      document.querySelector(`#result${uiPosition}`).innerText = players[i];
+    }, 5000);
+  }
+
+  // for (let i = 0; i < players.length; i++) {
+  //   // skip if Maddy
+  //   if (i === maddysIndex) {
+  //     continue;
+  //   }
+  //   handUICounter++;
+  //   // due to setTimeout being an async function, created uiPosition to lock in the handUICounter for each iteration
+  //   const uiPosition = handUICounter;
+  //   setTimeout(() => {
+  //     document.querySelector(`#result${uiPosition}`).innerText =
+  //       windsInChinese[i];
+  //     document.querySelector(`#turn-order${uiPosition}`).innerText = i + 1;
+  //   }, 2500);
+  // }
 }
 
 // SHUFFLE THE TILES
@@ -141,7 +177,7 @@ function takeReplacementTiles(undrawnTiles) {
           // update tile property (faceUp) to true
           currentPlayer.tilesInHand[j].faceUp = true;
           // move from hand to outside of hand, facing up
-          currentPlayer.tilesOutsideHand.push(currentPlayer.tilesInHand[j]);
+          currentPlayer.specialTiles.push(currentPlayer.tilesInHand[j]);
           currentPlayer.tilesInHand.splice(j, 1);
           // STEP 2: draw the num of tiles pushed out of hand from the end of the undistributed tile
           const buTile = undrawnTiles.pop();
@@ -167,6 +203,22 @@ function sortHand(playerInfo) {
   playerInfo.tilesInHand.sort((a, b) => a.tileId - b.tileId);
 }
 
+function drawTile(player) {
+  const frontTile = undistributedTiles.shift();
+  if (frontTile >= 51) {
+    player.specialTiles.push(frontTile);
+    drawTile(player);
+  } else {
+    player.tilesInHand.push(frontTile);
+    sortHand(player);
+  }
+}
+
+function throwTile(player) {
+  const thrownTile =
+    player.tilesInHand[Math.random() * player.tilesInHand.length];
+  return thrownTile;
+}
 // assignWinds();
 // // console.log(playerDetails);
 // const shuffledTiles = shuffle(allTiles);
@@ -179,7 +231,7 @@ function sortHand(playerInfo) {
 // console.log(undistributedTiles);
 // for (let i = 0; i < playerDetails.length; i++) {
 //   console.log(playerDetails[i].tilesInHand);
-//   console.log(playerDetails[i].tilesOutsideHand);
+//   console.log(playerDetails[i].specialTiles);
 // }
 
 export {
@@ -188,4 +240,8 @@ export {
   distributeTiles,
   takeReplacementTiles,
   sortHand,
+  playerDetails,
+  drawTile,
+  throwTile,
+  windsInChinese,
 };
