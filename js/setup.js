@@ -43,16 +43,23 @@ function assignWinds() {
       tai: 0,
     };
     playerDetails.push(obj);
-    // STEP 4: display wind AND turn number
-    // NOT WORKING AS INTENDED
-    if (players[i] === "Maddy") {
-      setTimeout(() => {
-        document.querySelector("#result1").innerText = windsInChinese[i];
-      }, 2500);
-    } else {
-      setTimeout(() => {
-        document.querySelector(`#result${i + 1}`).innerText = windsInChinese[i];
-      }, 2500);
+  }
+  // STEP 4: display wind AND turn number
+  while (document.querySelector("#result4") === "") {
+    let maddysPosition;
+    for (let i = 0; i < players.length; i++) {
+      if (players[i] === "Maddy") {
+        setTimeout(() => {
+          maddysPosition = i + 1;
+          document.querySelector("#result1").innerText = windsInChinese[i];
+          document.querySelector("#turn-order1").innerText = maddysPosition;
+        }, 2500);
+      } else {
+        setTimeout(() => {
+          document.querySelector(`#result${i + 1}`).innerText =
+            windsInChinese[i];
+        }, 2500);
+      }
     }
   }
 }
