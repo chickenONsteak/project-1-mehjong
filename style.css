@@ -66,7 +66,7 @@
   background-size: 200%;
 }
 
-.current-wind {
+#current-wind {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,49 +76,73 @@
   padding: 0;
 }
 
-.first-hand {
+.hands {
   display: grid;
-  grid-template-columns: 16;
-  grid-template-rows: 2;
+  background-color: #f5deb3;
+}
+
+#first-hand {
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   grid-column: 2 / span 7;
   grid-row: 9;
-  background-color: #f5deb3;
   margin-top: 5px;
 }
-.second-hand {
-  display: grid;
-  grid-template-columns: 16;
-  grid-template-rows: 2;
+
+#second-hand {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(16, 1fr);
   grid-column: 8;
   grid-row: 2 / span 7;
-  background-color: #f5deb3;
   margin-left: 5px;
 }
-.third-hand {
-  display: grid;
-  grid-template-columns: 16;
-  grid-template-rows: 2;
+
+#third-hand {
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   grid-column: 1 / span 7;
   grid-row: 2;
-  background-color: #f5deb3;
   margin-bottom: 5px;
 }
-.fourth-hand {
-  display: grid;
-  grid-template-columns: 16;
-  grid-template-rows: 2;
+
+#fourth-hand {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(16, 1fr);
   grid-column: 1;
   grid-row: 3 / span 7;
-  background-color: #f5deb3;
   margin-right: 5px;
 }
 
 #undistributed-tiles {
   display: grid;
-  grid-template-columns: 6;
-  grid-template-rows: 14;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(38, 1fr);
   grid-column: 9 / span 2;
   grid-row: 1 / span 10;
   margin-left: 10px;
   background-color: green;
+}
+
+#action-buttons {
+  grid-column: 1 / span 8;
+  grid-row: 10;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.game-actions {
+  height: 40px;
+  width: 100px;
+  border: solid 1.5px black;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+#roll {
+  grid-column: 5 / span 4;
+  grid-row: 4 / span 2;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: solid 2.5px black;
 }

@@ -44,18 +44,32 @@
     </div>
     <div class="wrapper">
       <div class="container" id="game-start" style="display: grid">
-        <h1 class="current-wind">东</h1>
-        <div id="board"></div>
-        <div class="first-hand"></div>
-        <div class="second-hand"></div>
-        <div class="third-hand"></div>
-        <div class="fourth-hand"></div>
+        <h1 class="jersey-10-regular" id="current-wind">东</h1>
+        <div id="board">
+          <button class="jersey-10-regular" id="roll">
+            Roll dice to begin!
+          </button>
+          <h1 id="roll results"></h1>
+        </div>
+        <div class="hands" id="first-hand"></div>
+        <div class="hands" id="second-hand"></div>
+        <div class="hands" id="third-hand"></div>
+        <div class="hands" id="fourth-hand"></div>
         <div id="undistributed-tiles"></div>
+        <div id="action-buttons">
+          <button class="jersey-10-regular game-actions" id="chi">Chi</button>
+          <button class="jersey-10-regular game-actions" id="pung">Pung</button>
+          <button class="jersey-10-regular game-actions" id="gang">Gang</button>
+          <button class="jersey-10-regular game-actions" id="pingHu">
+            Ping hu!
+          </button>
+        </div>
       </div>
     </div>
   </body>
   <script src="./js/tiles.js"></script>
   <script src="./js/setup.js"></script>
   <script src="./js/player-logic.js"></script>
-  <script src="./js/screen.js"></script>
+  <script src="./js/landingScreen.js"></script>
+  <script src="./js/main.js"></script>
 </html>

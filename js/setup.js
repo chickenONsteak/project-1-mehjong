@@ -157,3 +157,11 @@ for (let i = 0; i < playerDetails.length; i++) {
   console.log(playerDetails[i].tilesInHand);
   console.log(playerDetails[i].tilesOutsideHand);
 }
+
+export {
+  assignWinds,
+  shuffle,
+  distributeTiles,
+  takeReplacementTiles,
+  sortHand,
+};
