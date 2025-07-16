@@ -1,5 +1,6 @@
 import { allTiles, winds } from "./tiles.js";
 
+const windsInChinese = ["东", "南", "西", "北"];
 const players = ["Maddy", "Yen", "Yi Lin", "Shuwei"]; // CONTAINS: consolidated player names
 const playerDetails = []; // CONTAINS: player order, player names, and assigned wind
 
@@ -10,23 +11,28 @@ function rollDice() {
 
 // ASSIGN WINDS ACCORDING TO WHO GOES FIRST ETC
 function assignWinds() {
-  // FIRSTLY: sort the dice rolls
+  // STEP 1: sort the dice rolls
   // the human player is always the 1st roller
   const diceRolls = [];
   for (let i = 0; i < players.length; i++) {
     const obj = { roller: players[i], rollResults: rollDice() };
     diceRolls.push(obj);
+    // display roll results after 1.5s
+    setTimeout(() => {
+      document.querySelector(`#result${i + 1}`).innerText = obj.rollResults;
+    }, 500);
   }
   diceRolls.sort((a, b) => b.rollResults - a.rollResults);
 
-  // NEXT: the order is determined by the roll results, with player1 being the person who rolled the highest
+  // STEP 2: the order is determined by the roll results, with player1 being the person who rolled the highest
   for (let i = 0; i < players.length; i++) {
     let temporary = players[i];
     players[i] = diceRolls[i].roller;
     diceRolls[i].roller = temporary;
+    console.log(players[i]);
   }
 
-  // FINALLY: assign winds to the players
+  // STEP 3: assign winds to the players
   for (let i = 0; i < players.length; i++) {
     const obj = {
       player: i + 1,
@@ -37,6 +43,17 @@ function assignWinds() {
       tai: 0,
     };
     playerDetails.push(obj);
+    // STEP 4: display wind AND turn number
+    // NOT WORKING AS INTENDED
+    if (players[i] === "Maddy") {
+      setTimeout(() => {
+        document.querySelector("#result1").innerText = windsInChinese[i];
+      }, 2500);
+    } else {
+      setTimeout(() => {
+        document.querySelector(`#result${i + 1}`).innerText = windsInChinese[i];
+      }, 2500);
+    }
   }
 }
 
@@ -143,20 +160,20 @@ function sortHand(playerInfo) {
   playerInfo.tilesInHand.sort((a, b) => a.tileId - b.tileId);
 }
 
-assignWinds();
-// console.log(playerDetails);
-const shuffledTiles = shuffle(allTiles);
-let undistributedTiles = distributeTiles(shuffledTiles);
-for (let i = 0; i < playerDetails.length; i++) {
-  sortHand(playerDetails[i]);
-  console.log(playerDetails[i].tilesInHand);
-}
-undistributedTiles = takeReplacementTiles(undistributedTiles);
-console.log(undistributedTiles);
-for (let i = 0; i < playerDetails.length; i++) {
-  console.log(playerDetails[i].tilesInHand);
-  console.log(playerDetails[i].tilesOutsideHand);
-}
+// assignWinds();
+// // console.log(playerDetails);
+// const shuffledTiles = shuffle(allTiles);
+// let undistributedTiles = distributeTiles(shuffledTiles);
+// for (let i = 0; i < playerDetails.length; i++) {
+//   sortHand(playerDetails[i]);
+//   console.log(playerDetails[i].tilesInHand);
+// }
+// undistributedTiles = takeReplacementTiles(undistributedTiles);
+// console.log(undistributedTiles);
+// for (let i = 0; i < playerDetails.length; i++) {
+//   console.log(playerDetails[i].tilesInHand);
+//   console.log(playerDetails[i].tilesOutsideHand);
+// }
 
 export {
   assignWinds,

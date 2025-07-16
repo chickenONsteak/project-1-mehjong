@@ -49,12 +49,23 @@
           <button class="jersey-10-regular" id="roll">
             Roll dice to begin!
           </button>
-          <h1 id="roll results"></h1>
+          <h1 class="jersey-10-regular roll-results" id="result1">Maddy</h1>
+          <h1 class="jersey-10-regular roll-results" id="result2"></h1>
+          <h1 class="jersey-10-regular roll-results" id="result3"></h1>
+          <h1 class="jersey-10-regular roll-results" id="result4"></h1>
         </div>
-        <div class="hands" id="first-hand"></div>
-        <div class="hands" id="second-hand"></div>
-        <div class="hands" id="third-hand"></div>
-        <div class="hands" id="fourth-hand"></div>
+        <div class="hands" id="first-hand">
+          <p class="jersey-10-regular" id="turn-order1">1</p>
+        </div>
+        <div class="hands" id="second-hand">
+          <p class="jersey-10-regular" id="turn-order2">2</p>
+        </div>
+        <div class="hands" id="third-hand">
+          <p class="jersey-10-regular" id="turn-order3">3</p>
+        </div>
+        <div class="hands" id="fourth-hand">
+          <p class="jersey-10-regular" id="turn-order4">4</p>
+        </div>
         <div id="undistributed-tiles"></div>
         <div id="action-buttons">
           <button class="jersey-10-regular game-actions" id="chi">Chi</button>
@@ -67,9 +78,9 @@
       </div>
     </div>
   </body>
-  <script src="./js/tiles.js"></script>
-  <script src="./js/setup.js"></script>
-  <script src="./js/player-logic.js"></script>
-  <script src="./js/landingScreen.js"></script>
-  <script src="./js/main.js"></script>
+  <script src="./js/tiles.js" type="module"></script>
+  <script src="./js/setup.js" type="module"></script>
+  <script src="./js/player-logic.js" type="module"></script>
+  <script src="./js/landingScreen.js" type="module"></script>
+  <script src="./js/main.js" type="module"></script>
 </html>

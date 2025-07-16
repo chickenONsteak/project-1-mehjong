@@ -3,6 +3,9 @@
 //   // selected tile appears in the middle of the table
 // }
 
-// FUNCTION FOR CHI
+// // FUNCTION FOR CHI
+// function canChi() {
+//   if (lastThrownTile )
+// }
 
 // FUNCTION FOR PUNG
