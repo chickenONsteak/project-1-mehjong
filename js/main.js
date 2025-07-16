@@ -8,8 +8,10 @@ import {
   drawTile,
   throwTile,
   windsInChinese,
+  thrownTiles,
 } from "./setup.js";
 import { allTiles } from "./tiles.js";
+import { canChi, canPung, canGang } from "./player-logic.js";
 
 let undistributedTiles = [];
 let lastThrownTile = [];
@@ -47,19 +49,77 @@ while (!isGameOver) {
   for (let i = 0; i < winds.length; i++) {
     document.querySelector("#current-wind").innerText = windsInChinese[i];
     for (let j = 0; j < playerDetails.length; j) {
+      const currentPlayer = playerDetails[j];
+
+      // HANDLING AUTO TOSSING OF TILES FOR CPU AND PLAYER CHOOSING WHAT TILES TO THROW
       const sumOfNonSpecialTiles =
-        playerDetails[j].tilesInHand.length +
-        playerDetails[i].tilesOutsideHand.length;
-      if (playerDetails[j].playerName === "Maddy") {
-        continue;
+        currentPlayer.tilesInHand.length +
+        currentPlayer.tilesOutsideHand.length;
+      if (currentPlayer.playerName === "Maddy") {
+        continue; // let player pick which tile to throw
       } else {
         if (sumOfNonSpecialTiles === 13) {
           drawTile();
         } else if (sumOfNonSpecialTiles === 14) {
-          lastThrownTile = throwTile(playerDetails[j]);
+          lastThrownTile = throwTile(currentPlayer);
         }
       }
-      j++;
+      // SET TIMER FOR PLAYER TO TAKE TILE
+      setTimeout(() => {
+        j++;
+      }, 5000);
+
+      // HANDLING PLAYER CHI / PUNG
+      // reveal chi button if canChi
+      if (canChi()) {
+        // need to store the boolean in a var
+        const chiButton = document.querySelector("#chi");
+        chiButton.style.display = "grid";
+        chiButton.addEventListener("click", () => {
+          currentPlayer.tilesOutsideHand.push(lastThrownTile);
+          currentPlayer.tilesOutsideHand.push(tile1, tile2); // TODO: declare what tile1 and tile2 are
+          thrownTiles.pop();
+          lastThrownTile.pop();
+        });
+      } else {
+        document.querySelector("#chi").style.display = "none"; // hide it back
+      }
+
+      // reveal pung button if canPung
+      if (canPung()) {
+        // need to store the boolean in a var
+        const pungButton = document.querySelector("#pung");
+        pungButton.style.display = "grid";
+        pungButton.addEventListener("click", () => {
+          currentPlayer.tilesOutsideHand.push(lastThrownTile);
+          currentPlayer.tilesOutsideHand.push(tile1, tile2); // TODO: declare what tile1 and tile2 are
+          thrownTiles.pop();
+          lastThrownTile.pop();
+        });
+      } else {
+        document.querySelector("#pung").style.display = "none"; // hide it back
+      }
+
+      //   // DEPRIORITISED
+      //   // reveal gang button if canGang
+      //   if (canGang()) {
+      //     // need to store the boolean in a var
+      //     const pungButton = document.querySelector("#gang");
+      //     pungButton.style.display = "grid";
+      //     pungButton.addEventListener("click", () => {
+      //       currentPlayer.tilesOutsideHand.push(lastThrownTile); // TODO: does not cater to own Gang
+      //       currentPlayer.tilesOutsideHand.push(tile1, tile2, tile3); // TODO: declare what tile1, tile2, and tile3 are
+      //       thrownTiles.pop();
+      //       lastThrownTile.pop();
+      //     });
+      //   } else {
+      //     document.querySelector("#pung").style.display = "none"; // hide it back
+      //   }
+
+      // canPingHu function
+      //   function canPingHu() {
+
+      //   }
     }
   }
   isGameOver = true;

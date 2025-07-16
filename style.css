@@ -70,10 +70,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 4rem;
-  background-color: yellow;
-  margin: 0;
+  font-size: 3rem;
+  background-color: green;
+  margin: 10px;
   padding: 0;
+  color: white;
 }
 
 .hands {
@@ -219,4 +220,14 @@
   grid-row: 1;
   justify-self: end;
   align-self: start;
+}
+
+#message-board {
+  display: flex;
+  grid-column: 3 / span 5;
+  grid-row: 1;
+  background-color: white;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
 }

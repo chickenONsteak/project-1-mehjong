@@ -1,2 +1,4 @@
 // REMINDER 1: Give credits to Wikipedia for the tile images (https://en.wikipedia.org/wiki/Mahjong)
 // REMINDER 2: Fix setup.js assignWinds() function
+// REMINDER 3: ADD ALL FE STUFF
+// REMINDER 4: CANCHI FUNCTION SEEMS WRONG

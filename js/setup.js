@@ -3,6 +3,7 @@ import { allTiles, winds } from "./tiles.js";
 const windsInChinese = ["东", "南", "西", "北"];
 const players = ["Maddy", "Yen", "Yi Lin", "Shuwei"]; // CONTAINS: consolidated player names
 const playerDetails = []; // CONTAINS: player order, player names, and assigned wind
+const thrownTiles = [];
 
 // ROLL DICE AND DETERMINE WHICH PLAYER GOES FIRST
 function rollDice() {
@@ -217,6 +218,7 @@ function drawTile(player) {
 function throwTile(player) {
   const thrownTile =
     player.tilesInHand[Math.random() * player.tilesInHand.length];
+  thrownTiles.push(thrownTile);
   return thrownTile;
 }
 // assignWinds();
@@ -244,4 +246,5 @@ export {
   drawTile,
   throwTile,
   windsInChinese,
+  thrownTiles,
 };
