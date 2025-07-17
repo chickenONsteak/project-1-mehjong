@@ -6,7 +6,7 @@
 import { playerDetails } from "./setup.js";
 
 // FUNCTION FOR CHI
-function canChi(currentPlayerIdx) {
+function canChi(currentPlayerIdx, lastThrownTile) {
   const maddysIdx = playerDetails.indexOf((obj) => obj.playerName === "Maddy");
   let previousPlayerIndex;
   if (maddysIdx === 0) {

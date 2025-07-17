@@ -118,9 +118,7 @@ function pause(ms) {
 
 // FOR FOCUS STYLING
 function playerInFocus(currentIdx) {
-  console.log(currentIdx);
   const focusBorder = document.querySelector(`#result${currentIdx}`);
-  console.log(`#result${currentIdx}`);
   focusBorder.style.border = "8px solid yellow";
 }
 

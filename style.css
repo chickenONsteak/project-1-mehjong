@@ -187,9 +187,11 @@
   height: 40px;
   width: 100px;
   border: solid 1.5px black;
-  font-weight: bold;
-  font-size: 1.2rem;
+  font-weight: lighter;
+  font-size: 1.5rem;
   border: 5px outset grey;
+  background-color: darkgreen;
+  color: white;
 }
 
 #roll {
