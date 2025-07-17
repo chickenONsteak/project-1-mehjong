@@ -54,7 +54,8 @@ function assignWinds() {
   const maddysIndex = players.indexOf("Maddy");
   setTimeout(() => {
     document.querySelector("#result1").innerText = windsInChinese[maddysIndex];
-    document.querySelector("#turn-order1").innerText = maddysIndex + 1;
+    document.querySelector("#turn-order1").innerText =
+      windsInChinese[maddysIndex];
   }, 2500);
   setTimeout(() => {
     document.querySelector("#result1").innerText = "Maddy";
@@ -75,7 +76,7 @@ function assignWinds() {
       document.querySelector(`#result${temp}`).innerText =
         windsInChinese[nextPlayerIdx];
       document.querySelector(`#turn-order${temp}`).innerText =
-        nextPlayerIdx + 1;
+        windsInChinese[nextPlayerIdx];
     }, 2500);
     setTimeout(() => {
       document.querySelector(`#result${temp}`).innerText =
@@ -92,11 +93,10 @@ function assignWinds() {
     // due to setTimeout being an async function, created "temp" to temporarily lock in the handUICounterLeft for each iteration
     const temp = handUICounterLeft;
     setTimeout(() => {
-      console.log("run2");
       document.querySelector(`#result${temp}`).innerText =
         windsInChinese[prevPlayerIdx];
       document.querySelector(`#turn-order${temp}`).innerText =
-        prevPlayerIdx + 1;
+        windsInChinese[prevPlayerIdx];
     }, 2500);
     setTimeout(() => {
       document.querySelector(`#result${temp}`).innerText =
@@ -291,7 +291,7 @@ function sortHand(playerInfo) {
   playerInfo.tilesInHand.sort((a, b) => a.tileId - b.tileId);
 }
 
-function drawTile(player) {
+function drawTile(player, undistributedTiles) {
   const frontTile = undistributedTiles.shift();
   if (frontTile >= 51) {
     player.specialTiles.push(frontTile);
@@ -307,10 +307,26 @@ function drawTile(player) {
   }
 }
 
-function throwTile(player) {
+function throwTile(player, thrownTiles) {
   const thrownTile =
-    player.tilesInHand[Math.random() * player.tilesInHand.length];
+    player.tilesInHand[Math.floor(Math.random() * player.tilesInHand.length)];
   thrownTiles.push(thrownTile);
+  // update CPU hand img
+  for (let i = 1; i <= playerDetails.length; i++) {
+    if (player.playerName === document.querySelector(`#result${i}`).innerText) {
+      const img = document.querySelector("#tile-rear");
+      img.remove();
+    }
+  }
+  // update discarded table
+  const discardedTable = document.querySelector("#discarded-tiles");
+  const discardedTileImg = document.createElement("img");
+  discardedTileImg.id = `id-${thrownTile.tileId}`;
+  discardedTileImg.src = thrownTile.imageURI;
+  discardedTileImg.alt = `tile value ${thrownTile.tileId}`;
+  discardedTileImg.height = 25;
+  discardedTable.appendChild(discardedTileImg);
+
   return thrownTile;
 }
 // assignWinds();

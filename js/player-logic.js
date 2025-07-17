@@ -6,68 +6,106 @@
 import { playerDetails } from "./setup.js";
 
 // FUNCTION FOR CHI
-function canChi(currentIndex) {
+function canChi(currentPlayerIdx) {
+  const maddysIdx = playerDetails.indexOf((obj) => obj.playerName === "Maddy");
   let previousPlayerIndex;
-  if ((currentIndex = 0)) {
+  if (maddysIdx === 0) {
     previousPlayerIndex = playerDetails.length - 1;
   } else {
-    previousPlayerIndex = currentIndex - 1;
+    previousPlayerIndex = maddysIdx - 1;
   }
-  const previousPlayer = playerDetails[previousPlayerIndex];
-  // if previous player threw a character tile
-  if (
-    currentPlayer === previousPlayer &&
-    lastThrownTile.tileId > 0 &&
-    lastThrownTile.tileId < 30
-  ) {
-    // check if there's sequence in hand
-    let tile1;
-    let tile2;
-    // RETURN TILE1 & TILE2
-    for (let i = 0; i < currentPlayer.tileInHand.length; i++) {
-      let currentTile = currentPlayer.tileInHand[i];
-      if (lastThrownTile.tileId === currentTile.tileId + 1) {
-        for (let j = 0; j < currentPlayer.tileInHand.length; j++) {
-          if (
-            lastThrownTile.tileId ===
-            currentPlayer.tileInHand[j].tileId + 2
-          ) {
-            return true;
+  // if previous player threw a character tile, check if what was thrown can be eaten
+  if (currentPlayerIdx === previousPlayerIndex) {
+    const possibilities = [];
+    const lastThrownTileId = lastThrownTile.tileId;
+    for (tile1 of playerDetails[maddysIdx].tileInHand) {
+      // check if the tile thrown is the first time of the sequence
+      if (tile1.tileId === lastThrownTileId + 1) {
+        // if true, check for a third suitable tile in hand
+        for (tile2 of playerDetails[maddysIdx].tileInHand) {
+          if (tile2.tileId === lastThrownTileId + 2) {
+            possibilities.push({ ...lastThrownTile, tile1, tile2 });
+            // check if the tile thrown is the middle time of the sequence
+          } else if (tile2.tileId === lastThrownTileId - 1) {
+            possibilities.push({ tile2, ...lastThrownTile, tile1 });
           }
         }
-      } else if (lastThrownTile.tileId === currentTile.tileId + 2) {
-        for (let j = 0; j < currentPlayer.tileInHand.length; j++) {
-          if (
-            lastThrownTile.tileId ===
-            currentPlayer.tileInHand[j].tileId + 1
-          ) {
-            return true;
+        // check if the tile thrown is the last time of the sequence
+      } else if (tile1.tileId === lastThrownTileId - 1) {
+        for (tile2 of playerDetails[maddysIdx].tileInHand) {
+          if (tile2.tileId === lastThrownTileId - 2) {
+            possibilities.push({ tile2, tile1, ...lastThrownTile });
           }
         }
-      } else if (lastThrownTile.tileId === currentTile.tileId - 1) {
-        for (let j = 0; j < currentPlayer.tileInHand.length; j++) {
-          if (
-            lastThrownTile.tileId ===
-            currentPlayer.tileInHand[j].tileId - 2
-          ) {
-            return true;
-          }
-        }
-      } else if (lastThrownTile.tileId === currentTile.tileId - 2) {
-        for (let j = 0; j < currentPlayer.tileInHand.length; j++) {
-          if (
-            lastThrownTile.tileId ===
-            currentPlayer.tileInHand[j].tileId - 1
-          ) {
-            return true;
-          }
-        }
-      } else {
-        return false;
       }
+    }
+    if (possibilities.length > 0) {
+      return true;
     }
   }
 }
+// IF there are more than 1 possibilities, prompt user which one
+
+//   if ((currentIndex = 0)) {
+//     previousPlayerIndex = playerDetails.length - 1;
+//   } else {
+//     previousPlayerIndex = currentIndex - 1;
+//   }
+//   const previousPlayer = playerDetails[previousPlayerIndex];
+//   // if previous player threw a character tile
+//   if (
+//     currentPlayer === previousPlayer &&
+//     lastThrownTile.tileId > 0 &&
+//     lastThrownTile.tileId < 30
+//   ) {
+//     // check if there's sequence in hand
+//     let tile1;
+//     let tile2;
+//     // RETURN TILE1 & TILE2
+//     for (let i = 0; i < currentPlayer.tileInHand.length; i++) {
+//       let currentTile = currentPlayer.tileInHand[i];
+//       if (lastThrownTile.tileId === currentTile.tileId + 1) {
+//         for (let j = 0; j < currentPlayer.tileInHand.length; j++) {
+//           if (
+//             lastThrownTile.tileId ===
+//             currentPlayer.tileInHand[j].tileId + 2
+//           ) {
+//             return true;
+//           }
+//         }
+//       } else if (lastThrownTile.tileId === currentTile.tileId + 2) {
+//         for (let j = 0; j < currentPlayer.tileInHand.length; j++) {
+//           if (
+//             lastThrownTile.tileId ===
+//             currentPlayer.tileInHand[j].tileId + 1
+//           ) {
+//             return true;
+//           }
+//         }
+//       } else if (lastThrownTile.tileId === currentTile.tileId - 1) {
+//         for (let j = 0; j < currentPlayer.tileInHand.length; j++) {
+//           if (
+//             lastThrownTile.tileId ===
+//             currentPlayer.tileInHand[j].tileId - 2
+//           ) {
+//             return true;
+//           }
+//         }
+//       } else if (lastThrownTile.tileId === currentTile.tileId - 2) {
+//         for (let j = 0; j < currentPlayer.tileInHand.length; j++) {
+//           if (
+//             lastThrownTile.tileId ===
+//             currentPlayer.tileInHand[j].tileId - 1
+//           ) {
+//             return true;
+//           }
+//         }
+//       } else {
+//         return false;
+//       }
+//     }
+//   }
+// }
 
 // FUNCTION FOR PUNG
 function canPung() {

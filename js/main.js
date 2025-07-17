@@ -17,12 +17,14 @@ import {
   populateUnrevealedTable,
   populatePlayersHand,
   populateOpponentHands,
+  pause,
+  playerInFocus,
 } from "./updateScreens.js";
 
 let undistributedTiles = [];
 let lastThrownTile = [];
-const currentPlayer = [];
-let unrevealedTiles = [];
+const discardedTiles = [];
+let unrevealedTiles = structuredClone(allTiles); // deep copy allTiles
 
 // STEP 1: PLAYER ROLLS THE DICE, SHUFFLE TILES, AND REMOVE SPECIAL TILES FROM HAND
 const rollDiceButton = document.querySelector("#roll");
@@ -33,62 +35,61 @@ rollDiceButton.addEventListener("click", () => {
     // SHUFFLE TILES
     const shuffledTiles = shuffle(allTiles);
     undistributedTiles = distributeTiles(shuffledTiles);
-    unrevealedTiles = updateUnrevealedTiles(undistributedTiles); // TODO: THIS IS WRONG, CHECK ORDER
-    // DISPLAY TILES ON THE UNREVEALED TABLE
-    unrevealedTiles.sort((a, b) => a.tileId - b.tileId);
-    // populateUnrevealedTable(unrevealedTiles);
     // REMOVE SPECIAL TILES FROM HAND
     undistributedTiles = takeReplacementTiles(undistributedTiles);
-    // DISPLAY HANDS
-    unrevealedTiles = updateUnrevealedTiles(unrevealedTiles);
+    // DISPLAY TILES ON THE UNREVEALED TABLE
+    updateUnrevealedTiles(unrevealedTiles);
     unrevealedTiles.sort((a, b) => a.tileId - b.tileId);
+    populateUnrevealedTable(unrevealedTiles);
+    // DISPLAY HANDS
     populatePlayersHand();
     populateOpponentHands();
-    // UPDATE UNREVEALED TABLE AGAIN
-    populateUnrevealedTable(unrevealedTiles);
-    console.log(playerDetails);
-    console.log(unrevealedTiles.length);
+    document.querySelector("#start").style.display = "grid";
   }, 6000);
 });
-// assignWinds(); // testing purposes
-
-// // SHUFFLE TILES
-// const shuffledTiles = shuffle(allTiles);
-// undistributedTiles = distributeTiles(shuffledTiles);
-// unrevealedTiles = updateUnrevealedTiles();
-// // "bu"
-// undistributedTiles = takeReplacementTiles(undistributedTiles);
-// // organise unrevealed tiles
-// unrevealedTiles = updateUnrevealedTiles();
-// unrevealedTiles.sort((a, b) => a.tileId - b.tileId);
-// console.log(playerDetails);
 
 // STEP 2: GAME START
-let isGameOver = false;
-while (!isGameOver) {
-  // first player throw (note: only 4x4 rounds to simplify things)
-  let readyToPingHu = false;
-  for (let i = 0; i < winds.length; i++) {
-    document.querySelector("#current-wind").innerText = windsInChinese[i];
-    for (let j = 0; j < playerDetails.length; j) {
-      const currentPlayer = playerDetails[j];
-
-      // HANDLING AUTO TOSSING OF TILES FOR CPU AND PLAYER CHOOSING WHAT TILES TO THROW
-      const sumOfNonSpecialTiles =
-        currentPlayer.tilesInHand.length +
-        currentPlayer.tilesOutsideHand.length;
-      if (currentPlayer.playerName === "Maddy") {
-        continue; // TODO: let player pick which tile to throw
-      } else {
-        if (sumOfNonSpecialTiles === 13) {
-          drawTile();
-        } else if (sumOfNonSpecialTiles === 14) {
-          lastThrownTile = throwTile(currentPlayer);
-          // remove from unrevealed tiles
-          const matchedIdx = unrevealedTiles.findIndex(
-            (obj) => obj.tileId === lastThrownTile.tileId
-          );
-          unrevealedTiles.splice(matchedIdx, 1);
+// wrap everything as an async function so I can utilise await to pause after tiles are thrown
+document.querySelector("#start").addEventListener("click", async () => {
+  document.querySelector("#start").style.display = "none";
+  document.querySelector("#discarded-tiles").style.display = "grid";
+  let windsCompleted = 0;
+  let roundsCompleted = 0;
+  // only 4x4 rounds to simplify things
+  while (windsCompleted < 4) {
+    document.querySelector("#current-wind").innerText =
+      windsInChinese[windsCompleted];
+    while (roundsCompleted < 4) {
+      // first player throw
+      for (let i = 0; i < playerDetails.length; i++) {
+        const currentPlayer = playerDetails[i];
+        // HIGHLIGHT CURRENT PLAYER
+        playerInFocus(i + 1);
+        // HANDLING AUTO TOSSING OF TILES FOR CPU AND PLAYER CHOOSING WHAT TILES TO THROW
+        const sumOfNonSpecialTiles =
+          currentPlayer.tilesInHand.length +
+          currentPlayer.tilesOutsideHand.length;
+        if (currentPlayer.playerName === "Maddy") {
+          continue; // TODO: let player pick which tile to throw
+        } else {
+          if (sumOfNonSpecialTiles === 13) {
+            drawTile(currentPlayer, undistributedTiles);
+          }
+          if (sumOfNonSpecialTiles === 14) {
+            lastThrownTile = throwTile(currentPlayer, discardedTiles);
+            // REMOVE FROM UNREVEALED TILES
+            const matchedIdx = unrevealedTiles.findIndex(
+              (obj) => obj.tileId === lastThrownTile.tileId
+            );
+            const img = document.querySelector(`#id-${lastThrownTile.tileId}`);
+            img.remove();
+            unrevealedTiles.splice(matchedIdx, 1);
+            // PAUSE FOR PLAYER TO THINK
+            await pause(5000);
+            document.querySelector(`#result${i + 1}`).style.border =
+              "1.5px solid black";
+          }
+          // UPDATE FOCUS BACK
         }
       }
 
@@ -101,11 +102,6 @@ while (!isGameOver) {
           // press the button again to
         }
       });
-
-      // SET TIMER FOR PLAYER TO THINK
-      setTimeout(() => {
-        j++;
-      }, 5000);
 
       // HANDLING PLAYER CHI / PUNG
       // reveal chi button if canChi
@@ -161,5 +157,4 @@ while (!isGameOver) {
       //   }
     }
   }
-  isGameOver = true;
-}
+});
