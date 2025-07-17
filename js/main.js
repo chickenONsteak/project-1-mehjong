@@ -33,14 +33,15 @@ rollDiceButton.addEventListener("click", () => {
     // SHUFFLE TILES
     const shuffledTiles = shuffle(allTiles);
     undistributedTiles = distributeTiles(shuffledTiles);
-    unrevealedTiles = updateUnrevealedTiles(undistributedTiles);
+    unrevealedTiles = updateUnrevealedTiles(undistributedTiles); // TODO: THIS IS WRONG, CHECK ORDER
     // DISPLAY TILES ON THE UNREVEALED TABLE
     unrevealedTiles.sort((a, b) => a.tileId - b.tileId);
-    populateUnrevealedTable(unrevealedTiles);
+    // populateUnrevealedTable(unrevealedTiles);
     // REMOVE SPECIAL TILES FROM HAND
     undistributedTiles = takeReplacementTiles(undistributedTiles);
     // DISPLAY HANDS
     unrevealedTiles = updateUnrevealedTiles(unrevealedTiles);
+    unrevealedTiles.sort((a, b) => a.tileId - b.tileId);
     populatePlayersHand();
     populateOpponentHands();
     // UPDATE UNREVEALED TABLE AGAIN

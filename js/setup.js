@@ -56,6 +56,9 @@ function assignWinds() {
     document.querySelector("#result1").innerText = windsInChinese[maddysIndex];
     document.querySelector("#turn-order1").innerText = maddysIndex + 1;
   }, 2500);
+  setTimeout(() => {
+    document.querySelector("#result1").innerText = "Maddy";
+  }, 5000);
 
   // next, fill positions to the right of Maddy
   let handUICounterRight = 2; // Maddy is anchored as first hand
@@ -65,17 +68,19 @@ function assignWinds() {
     nextPlayerIdx < players.length;
     nextPlayerIdx++
   ) {
-    console.log("idx", nextPlayerIdx);
+    // due to setTimeout being an async function, created "temp" to temporarily lock in the handUICounterRight for each iteration
+    const temp = handUICounterRight;
+    // console.log("idx", nextPlayerIdx);
     setTimeout(() => {
-      document.querySelector(`#result${handUICounterRight}`).innerText =
+      document.querySelector(`#result${temp}`).innerText =
         windsInChinese[nextPlayerIdx];
-      document.querySelector(`#turn-order${handUICounterRight}`).innerText =
+      document.querySelector(`#turn-order${temp}`).innerText =
         nextPlayerIdx + 1;
     }, 2500);
     setTimeout(() => {
-      document.querySelector(`#result${handUICounterRight}`).innerText =
+      document.querySelector(`#result${temp}`).innerText =
         players[nextPlayerIdx];
-    }, 10000);
+    }, 5000);
     handUICounterRight++;
   }
   // finally, populating players to the left of Maddy
@@ -84,17 +89,19 @@ function assignWinds() {
     prevPlayerIdx >= 0;
     prevPlayerIdx--
   ) {
+    // due to setTimeout being an async function, created "temp" to temporarily lock in the handUICounterLeft for each iteration
+    const temp = handUICounterLeft;
     setTimeout(() => {
       console.log("run2");
-      document.querySelector(`#result${handUICounterLeft}`).innerText =
+      document.querySelector(`#result${temp}`).innerText =
         windsInChinese[prevPlayerIdx];
-      document.querySelector(`#turn-order${handUICounterLeft}`).innerText =
+      document.querySelector(`#turn-order${temp}`).innerText =
         prevPlayerIdx + 1;
     }, 2500);
     setTimeout(() => {
-      document.querySelector(`#result${handUICounterLeft}`).innerText =
+      document.querySelector(`#result${temp}`).innerText =
         players[prevPlayerIdx];
-    }, 10000);
+    }, 5000);
     handUICounterLeft--;
   }
 }

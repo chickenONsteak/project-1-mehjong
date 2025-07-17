@@ -53,15 +53,15 @@ function populatePlayersHand() {
 }
 
 function populateOpponentHands() {
-  // start from 2nd hand, populate the tiles in hand
+  // starting from the 2nd hand
   for (let i = 2; i <= playerDetails.length; i++) {
+    // populate the tiles in hand first
     const opponentHands = document.querySelector(`#unrevealed-tiles${i}`);
     const nameOfPlayer = document.querySelector(`#result${i}`).innerText;
     console.log(nameOfPlayer);
     const playerIdx = playerDetails.findIndex(
       (obj) => obj.playerName === nameOfPlayer
     );
-    console.log(playerIdx);
     const tileCount = playerDetails[playerIdx].tilesInHand.length;
     console.log(tileCount);
     for (let j = 0; j < tileCount; j++) {
