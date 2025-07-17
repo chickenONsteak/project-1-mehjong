@@ -202,10 +202,10 @@ function takeReplacementTiles(undrawnTiles) {
 }
 
 // to update the tiles that have yet to be revealed
-function updateUnrevealedTiles() {
+function updateUnrevealedTiles(unrevealedTiles) {
   for (let i = 0; i < playerDetails.length; i++) {
     // remove those from outside of hands first
-    for (tile of playerDetails[i].tilesOutsideHand) {
+    for (let tile of playerDetails[i].tilesOutsideHand) {
       for (let j = 0; j < unrevealedTiles.length; j++) {
         if (tile.tileId === unrevealedTiles[j].tileId) {
           unrevealedTiles.splice(j, 1);
@@ -215,7 +215,7 @@ function updateUnrevealedTiles() {
     }
     // remove those inside Maddy's hands
     if (playerDetails[i].playerName === "Maddy") {
-      for (tile of playerDetails[i].tilesInHand) {
+      for (let tile of playerDetails[i].tilesInHand) {
         for (let j = 0; j < unrevealedTiles.length; j++) {
           if (tile.tileId === unrevealedTiles[j].tileId) {
             unrevealedTiles.splice(j, 1);
@@ -225,6 +225,7 @@ function updateUnrevealedTiles() {
       }
     }
   }
+  return unrevealedTiles;
 }
 
 function sortHand(playerInfo) {
@@ -235,6 +236,11 @@ function drawTile(player) {
   const frontTile = undistributedTiles.shift();
   if (frontTile >= 51) {
     player.specialTiles.push(frontTile);
+    // remove from unrevealedTiles
+    const matchedIdx = unrevealedTiles.findIndex(
+      (obj) => obj.tileId === frontTile
+    );
+    unrevealedTiles.splice(matchedIdx, 1);
     drawTile(player);
   } else {
     player.tilesInHand.push(frontTile);
@@ -275,4 +281,5 @@ export {
   windsInChinese,
   thrownTiles,
   updateUnrevealedTiles,
+  unrevealedTiles,
 };

@@ -11,39 +11,52 @@ import {
   thrownTiles,
   updateUnrevealedTiles,
 } from "./setup.js";
-import { allTiles } from "./tiles.js";
+import { allTiles, winds } from "./tiles.js";
 import { canChi, canPung, canGang, canPingHu } from "./player-logic.js";
+import {
+  populateUnrevealedTable,
+  populatePlayersHand,
+} from "./updateScreens.js";
 
 let undistributedTiles = [];
 let lastThrownTile = [];
 const currentPlayer = [];
+let unrevealedTiles = [];
 
-// // STEP 1: PLAYER ROLLS THE DICE, SHUFFLE TILES, AND REMOVE SPECIAL TILES FROM HAND
-// const rollDiceButton = document.querySelector("#roll");
-// rollDiceButton.addEventListener("click", () => {
-//   rollDiceButton.style.display = "none";
-//   assignWinds();
-//   setTimeout(() => {
-//     // SHUFFLE TILES
-//     const shuffledTiles = shuffle(allTiles);
-//     undistributedTiles = distributeTiles(shuffledTiles);
-//     // TO INCLUDE — TILES ON THE UNDISTRIBUTED TABLE
-//     // REMOVE SPECIAL TILES FROM HAND
-//     undistributedTiles = takeReplacementTiles(undistributedTiles);
-//     // TO INCLUDE — TILES OUTSIDE OF HAND
-//   }, 10000);
-// });
-assignWinds(); // testing purposes
+// STEP 1: PLAYER ROLLS THE DICE, SHUFFLE TILES, AND REMOVE SPECIAL TILES FROM HAND
+const rollDiceButton = document.querySelector("#roll");
+rollDiceButton.addEventListener("click", () => {
+  rollDiceButton.style.display = "none";
+  assignWinds();
+  setTimeout(() => {
+    // SHUFFLE TILES
+    const shuffledTiles = shuffle(allTiles);
+    undistributedTiles = distributeTiles(shuffledTiles);
+    unrevealedTiles = updateUnrevealedTiles(undistributedTiles);
+    // DISPLAY TILES ON THE UNREVEALED TABLE
+    unrevealedTiles.sort((a, b) => a.tileId - b.tileId);
+    populateUnrevealedTable(unrevealedTiles);
+    // REMOVE SPECIAL TILES FROM HAND
+    undistributedTiles = takeReplacementTiles(undistributedTiles);
+    // DISPLAY HANDS
+    unrevealedTiles = updateUnrevealedTiles(unrevealedTiles);
+    populatePlayersHand();
+    populateUnrevealedTable(unrevealedTiles);
+    // TO INCLUDE — TILES OUTSIDE OF HAND
+  }, 6000);
+});
+// assignWinds(); // testing purposes
 
-// SHUFFLE TILES
-const shuffledTiles = shuffle(allTiles);
-undistributedTiles = distributeTiles(shuffledTiles);
-updateUnrevealedTiles();
-// organise undistributed tiles
-undistributedTiles.sort((a, b) => a.tileId - b.tileId);
-undistributedTiles = takeReplacementTiles(undistributedTiles);
-updateUnrevealedTiles();
-console.log(playerDetails);
+// // SHUFFLE TILES
+// const shuffledTiles = shuffle(allTiles);
+// undistributedTiles = distributeTiles(shuffledTiles);
+// unrevealedTiles = updateUnrevealedTiles();
+// // "bu"
+// undistributedTiles = takeReplacementTiles(undistributedTiles);
+// // organise unrevealed tiles
+// unrevealedTiles = updateUnrevealedTiles();
+// unrevealedTiles.sort((a, b) => a.tileId - b.tileId);
+// console.log(playerDetails);
 
 // STEP 2: GAME START
 let isGameOver = false;
@@ -60,19 +73,21 @@ while (!isGameOver) {
         currentPlayer.tilesInHand.length +
         currentPlayer.tilesOutsideHand.length;
       if (currentPlayer.playerName === "Maddy") {
-        continue; // let player pick which tile to throw
+        continue; // TODO: let player pick which tile to throw
       } else {
         if (sumOfNonSpecialTiles === 13) {
           drawTile();
         } else if (sumOfNonSpecialTiles === 14) {
           lastThrownTile = throwTile(currentPlayer);
+          // remove from unrevealed tiles
+          const matchedIdx = unrevealedTiles.findIndex(
+            (obj) => obj.tileId === lastThrownTile.tileId
+          );
+          unrevealedTiles.splice(matchedIdx, 1);
         }
       }
-      // SET TIMER FOR PLAYER TO THINK
-      setTimeout(() => {
-        j++;
-      }, 5000);
 
+      // IF PLAYER PRESS PING HU, PAUSE THE GAME
       const pingHuButton = document.querySelector("#pingHu");
       pingHuButton.addEventListener("click", () => {
         if (canPingHu()) {
@@ -81,6 +96,11 @@ while (!isGameOver) {
           // press the button again to
         }
       });
+
+      // SET TIMER FOR PLAYER TO THINK
+      setTimeout(() => {
+        j++;
+      }, 5000);
 
       // HANDLING PLAYER CHI / PUNG
       // reveal chi button if canChi

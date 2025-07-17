@@ -3,7 +3,7 @@
 //   // selected tile appears in the middle of the table
 // }
 
-import { playerDetails } from "./setup";
+import { playerDetails } from "./setup.js";
 
 // FUNCTION FOR CHI
 function canChi(currentIndex) {
