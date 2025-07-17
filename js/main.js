@@ -9,9 +9,10 @@ import {
   throwTile,
   windsInChinese,
   thrownTiles,
+  updateUnrevealedTiles,
 } from "./setup.js";
 import { allTiles } from "./tiles.js";
-import { canChi, canPung, canGang } from "./player-logic.js";
+import { canChi, canPung, canGang, canPingHu } from "./player-logic.js";
 
 let undistributedTiles = [];
 let lastThrownTile = [];
@@ -37,15 +38,18 @@ assignWinds(); // testing purposes
 // SHUFFLE TILES
 const shuffledTiles = shuffle(allTiles);
 undistributedTiles = distributeTiles(shuffledTiles);
+updateUnrevealedTiles();
 // organise undistributed tiles
 undistributedTiles.sort((a, b) => a.tileId - b.tileId);
 undistributedTiles = takeReplacementTiles(undistributedTiles);
+updateUnrevealedTiles();
 console.log(playerDetails);
 
 // STEP 2: GAME START
 let isGameOver = false;
 while (!isGameOver) {
   // first player throw (note: only 4x4 rounds to simplify things)
+  let readyToPingHu = false;
   for (let i = 0; i < winds.length; i++) {
     document.querySelector("#current-wind").innerText = windsInChinese[i];
     for (let j = 0; j < playerDetails.length; j) {
@@ -64,10 +68,19 @@ while (!isGameOver) {
           lastThrownTile = throwTile(currentPlayer);
         }
       }
-      // SET TIMER FOR PLAYER TO TAKE TILE
+      // SET TIMER FOR PLAYER TO THINK
       setTimeout(() => {
         j++;
       }, 5000);
+
+      const pingHuButton = document.querySelector("#pingHu");
+      pingHuButton.addEventListener("click", () => {
+        if (canPingHu()) {
+          isGameOver = true;
+        } else {
+          // press the button again to
+        }
+      });
 
       // HANDLING PLAYER CHI / PUNG
       // reveal chi button if canChi

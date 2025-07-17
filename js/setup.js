@@ -4,6 +4,7 @@ const windsInChinese = ["东", "南", "西", "北"];
 const players = ["Maddy", "Yen", "Yi Lin", "Shuwei"]; // CONTAINS: consolidated player names
 const playerDetails = []; // CONTAINS: player order, player names, and assigned wind
 const thrownTiles = [];
+const unrevealedTiles = [allTiles]; // CONTAINS: tiles that are either undistributed or in opponent's hands
 
 // ROLL DICE AND DETERMINE WHICH PLAYER GOES FIRST
 function rollDice() {
@@ -200,6 +201,32 @@ function takeReplacementTiles(undrawnTiles) {
   return undrawnTiles;
 }
 
+// to update the tiles that have yet to be revealed
+function updateUnrevealedTiles() {
+  for (let i = 0; i < playerDetails.length; i++) {
+    // remove those from outside of hands first
+    for (tile of playerDetails[i].tilesOutsideHand) {
+      for (let j = 0; j < unrevealedTiles.length; j++) {
+        if (tile.tileId === unrevealedTiles[j].tileId) {
+          unrevealedTiles.splice(j, 1);
+          break; // remove once and go to next tile outside hand
+        }
+      }
+    }
+    // remove those inside Maddy's hands
+    if (playerDetails[i].playerName === "Maddy") {
+      for (tile of playerDetails[i].tilesInHand) {
+        for (let j = 0; j < unrevealedTiles.length; j++) {
+          if (tile.tileId === unrevealedTiles[j].tileId) {
+            unrevealedTiles.splice(j, 1);
+            break; // remove once and go to next tile inside Maddy's hand
+          }
+        }
+      }
+    }
+  }
+}
+
 function sortHand(playerInfo) {
   playerInfo.tilesInHand.sort((a, b) => a.tileId - b.tileId);
 }
@@ -247,4 +274,5 @@ export {
   throwTile,
   windsInChinese,
   thrownTiles,
+  updateUnrevealedTiles,
 };
