@@ -141,6 +141,7 @@ document.querySelector("#start").addEventListener("click", async () => {
             img.remove();
             unrevealedTiles.splice(matchedIdx, 1);
             console.log(currentPlayer.tilesInHand.length);
+            updateUnrevealedTiles(unrevealedTiles);
           }
           // PAUSE FOR PLAYER TO THINK
           await pause(5000);

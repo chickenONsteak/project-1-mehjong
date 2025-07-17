@@ -316,6 +316,12 @@ function throwTile(player, thrownTiles) {
     if (player.playerName === document.querySelector(`#result${i}`).innerText) {
       const img = document.querySelector("#tile-rear");
       img.remove();
+      const newImg = document.createElement("img");
+      newImg.id = `id-${thrownTile.tileId}`;
+      newImg.src = thrownTile.imageURI;
+      newImg.alt = `tile value ${thrownTile.tileId}`;
+      newImg.height = 25;
+      document.querySelector("#discarded-tiles").appendChild(newImg);
     }
   }
   // update discarded table
