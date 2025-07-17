@@ -129,6 +129,21 @@
   gap: 3px;
 }
 
+.vertical-unrevealed {
+  grid-column: 1 / span 2;
+  grid-row: 3 / span 14;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.vertical-unrevealed img {
+  transform: rotate(90deg);
+  margin-top: -8px;
+  padding: 0;
+}
+
 #undistributed-tiles {
   display: grid;
   grid-template-columns: repeat(6, 1fr);

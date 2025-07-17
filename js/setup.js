@@ -19,7 +19,7 @@ function assignWinds() {
   for (let i = 0; i < players.length; i++) {
     const obj = { roller: players[i], rollResults: rollDice() };
     diceRolls.push(obj);
-    // display roll results after 1.5s
+    // display roll results after 0.5s
     setTimeout(() => {
       document.querySelector(`#result${i + 1}`).innerText = obj.rollResults;
     }, 500);
@@ -45,62 +45,114 @@ function assignWinds() {
     };
     playerDetails.push(obj);
   }
+
+  // [Y, YL, M, S]
+  // [M, Y, S, YL]
+  // [SW, Y, YL, M]
   // STEP 4: display wind AND turn number
   // firstly, find out what position is Maddy — this is because we want to lock Maddy as the first hand (player's hand)
-  let handUICounter = 1; // Maddy is anchored as first hand
   const maddysIndex = players.indexOf("Maddy");
   setTimeout(() => {
     document.querySelector("#result1").innerText = windsInChinese[maddysIndex];
     document.querySelector("#turn-order1").innerText = maddysIndex + 1;
   }, 2500);
-  setTimeout(() => {
-    document.querySelector("#result1").innerText = "Maddy";
-  }, 5000);
-  // finally, populate players before AND after Maddy (if she's not the player to go first / last respectively)
-  // populating players to the right of Maddy
-  for (let i = maddysIndex + 1; i < players.length; i++) {
-    handUICounter++;
-    // due to setTimeout being an async function, created uiPosition to lock in the handUICounter for each iteration
-    const uiPosition = handUICounter;
-    setTimeout(() => {
-      document.querySelector(`#result${uiPosition}`).innerText =
-        windsInChinese[i];
-      document.querySelector(`#turn-order${uiPosition}`).innerText = i + 1;
-    }, 2500);
-    setTimeout(() => {
-      document.querySelector(`#result${uiPosition}`).innerText = players[i];
-    }, 5000);
-  }
-  // populating players to the left of Maddy
-  for (let i = maddysIndex - 1; i >= 0; i--) {
-    handUICounter++;
-    // due to setTimeout being an async function, created uiPosition to lock in the handUICounter for each iteration
-    const uiPosition = handUICounter;
-    setTimeout(() => {
-      document.querySelector(`#result${uiPosition}`).innerText =
-        windsInChinese[i];
-      document.querySelector(`#turn-order${uiPosition}`).innerText = i + 1;
-    }, 2500);
-    setTimeout(() => {
-      document.querySelector(`#result${uiPosition}`).innerText = players[i];
-    }, 5000);
-  }
 
-  // for (let i = 0; i < players.length; i++) {
-  //   // skip if Maddy
-  //   if (i === maddysIndex) {
-  //     continue;
-  //   }
-  //   handUICounter++;
-  //   // due to setTimeout being an async function, created uiPosition to lock in the handUICounter for each iteration
-  //   const uiPosition = handUICounter;
-  //   setTimeout(() => {
-  //     document.querySelector(`#result${uiPosition}`).innerText =
-  //       windsInChinese[i];
-  //     document.querySelector(`#turn-order${uiPosition}`).innerText = i + 1;
-  //   }, 2500);
-  // }
+  // next, fill positions to the right of Maddy
+  let handUICounterRight = 2; // Maddy is anchored as first hand
+  let handUICounterLeft = 4;
+  for (
+    let nextPlayerIdx = maddysIndex + 1;
+    nextPlayerIdx < players.length;
+    nextPlayerIdx++
+  ) {
+    console.log("idx", nextPlayerIdx);
+    setTimeout(() => {
+      document.querySelector(`#result${handUICounterRight}`).innerText =
+        windsInChinese[nextPlayerIdx];
+      document.querySelector(`#turn-order${handUICounterRight}`).innerText =
+        nextPlayerIdx + 1;
+    }, 2500);
+    setTimeout(() => {
+      document.querySelector(`#result${handUICounterRight}`).innerText =
+        players[nextPlayerIdx];
+    }, 10000);
+    handUICounterRight++;
+  }
+  // finally, populating players to the left of Maddy
+  for (
+    let prevPlayerIdx = maddysIndex - 1;
+    prevPlayerIdx >= 0;
+    prevPlayerIdx--
+  ) {
+    setTimeout(() => {
+      console.log("run2");
+      document.querySelector(`#result${handUICounterLeft}`).innerText =
+        windsInChinese[prevPlayerIdx];
+      document.querySelector(`#turn-order${handUICounterLeft}`).innerText =
+        prevPlayerIdx + 1;
+    }, 2500);
+    setTimeout(() => {
+      document.querySelector(`#result${handUICounterLeft}`).innerText =
+        players[prevPlayerIdx];
+    }, 10000);
+    handUICounterLeft--;
+  }
 }
+// // firstly, find out what position is Maddy — this is because we want to lock Maddy as the first hand (player's hand)
+// let handUICounter = 1; // Maddy is anchored as first hand
+// const maddysIndex = players.indexOf("Maddy");
+// setTimeout(() => {
+//   document.querySelector("#result1").innerText = windsInChinese[maddysIndex];
+//   document.querySelector("#turn-order1").innerText = maddysIndex + 1;
+// }, 2500);
+// setTimeout(() => {
+//   document.querySelector("#result1").innerText = "Maddy";
+// }, 5000);
+// // finally, populate players before AND after Maddy (if she's not the player to go first / last respectively)
+// // populating players to the right of Maddy
+// for (let i = maddysIndex + 1; i < players.length; i++) {
+//   handUICounter++;
+//   // due to setTimeout being an async function, created uiPosition to lock in the handUICounter for each iteration
+//   const uiPosition = handUICounter;
+//   setTimeout(() => {
+//     document.querySelector(`#result${uiPosition}`).innerText =
+//       windsInChinese[i];
+//     document.querySelector(`#turn-order${uiPosition}`).innerText = i + 1;
+//   }, 2500);
+//   setTimeout(() => {
+//     document.querySelector(`#result${uiPosition}`).innerText = players[i];
+//   }, 5000);
+// }
+// // populating players to the left of Maddy
+// for (let i = maddysIndex - 1; i >= 0; i--) {
+//   handUICounter++;
+//   // due to setTimeout being an async function, created uiPosition to lock in the handUICounter for each iteration
+//   const uiPosition = handUICounter;
+//   setTimeout(() => {
+//     document.querySelector(`#result${uiPosition}`).innerText =
+//       windsInChinese[i];
+//     document.querySelector(`#turn-order${uiPosition}`).innerText = i + 1;
+//   }, 2500);
+//   setTimeout(() => {
+//     document.querySelector(`#result${uiPosition}`).innerText = players[i];
+//   }, 5000);
+// }
+
+// for (let i = 0; i < players.length; i++) {
+//   // skip if Maddy
+//   if (i === maddysIndex) {
+//     continue;
+//   }
+//   handUICounter++;
+//   // due to setTimeout being an async function, created uiPosition to lock in the handUICounter for each iteration
+//   const uiPosition = handUICounter;
+//   setTimeout(() => {
+//     document.querySelector(`#result${uiPosition}`).innerText =
+//       windsInChinese[i];
+//     document.querySelector(`#turn-order${uiPosition}`).innerText = i + 1;
+//   }, 2500);
+// }
+// }
 
 // SHUFFLE THE TILES
 // use Durstenfeld's version of the Fisher-Yates shuffle
@@ -147,7 +199,7 @@ function distributeTiles(undrawnTiles) {
           undrawnTiles.splice(0, 2);
         } else {
           playerDetails[i].tilesInHand.push(undrawnTiles[0]);
-          undrawnTiles.splice(0, 2);
+          undrawnTiles.splice(0, 1);
         }
       }
     }

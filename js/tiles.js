@@ -1,7 +1,6 @@
 // CONSTANTS
 // ---
 // ASSETS
-// const faceDownImg =
 const yiSuoImg =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/MJs1-.svg/120px-MJs1-.svg.png";
 const erSuoImg =

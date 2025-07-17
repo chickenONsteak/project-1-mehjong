@@ -16,6 +16,7 @@ import { canChi, canPung, canGang, canPingHu } from "./player-logic.js";
 import {
   populateUnrevealedTable,
   populatePlayersHand,
+  populateOpponentHands,
 } from "./updateScreens.js";
 
 let undistributedTiles = [];
@@ -41,8 +42,11 @@ rollDiceButton.addEventListener("click", () => {
     // DISPLAY HANDS
     unrevealedTiles = updateUnrevealedTiles(unrevealedTiles);
     populatePlayersHand();
+    populateOpponentHands();
+    // UPDATE UNREVEALED TABLE AGAIN
     populateUnrevealedTable(unrevealedTiles);
-    // TO INCLUDE — TILES OUTSIDE OF HAND
+    console.log(playerDetails);
+    console.log(unrevealedTiles.length);
   }, 6000);
 });
 // assignWinds(); // testing purposes
@@ -118,20 +122,21 @@ while (!isGameOver) {
         document.querySelector("#chi").style.display = "none"; // hide it back
       }
 
-      // reveal pung button if canPung
-      if (canPung()) {
-        // need to store the boolean in a var
-        const pungButton = document.querySelector("#pung");
-        pungButton.style.display = "grid";
-        pungButton.addEventListener("click", () => {
-          currentPlayer.tilesOutsideHand.push(lastThrownTile);
-          currentPlayer.tilesOutsideHand.push(tile1, tile2); // TODO: declare what tile1 and tile2 are
-          thrownTiles.pop();
-          lastThrownTile.pop();
-        });
-      } else {
-        document.querySelector("#pung").style.display = "none"; // hide it back
-      }
+      // // DEPRIORITISED
+      // // reveal pung button if canPung
+      // if (canPung()) {
+      //   // need to store the boolean in a var
+      //   const pungButton = document.querySelector("#pung");
+      //   pungButton.style.display = "grid";
+      //   pungButton.addEventListener("click", () => {
+      //     currentPlayer.tilesOutsideHand.push(lastThrownTile);
+      //     currentPlayer.tilesOutsideHand.push(tile1, tile2); // TODO: declare what tile1 and tile2 are
+      //     thrownTiles.pop();
+      //     lastThrownTile.pop();
+      //   });
+      // } else {
+      //   document.querySelector("#pung").style.display = "none"; // hide it back
+      // }
 
       //   // DEPRIORITISED
       //   // reveal gang button if canGang

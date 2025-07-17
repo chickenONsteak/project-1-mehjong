@@ -1,6 +1,8 @@
+const backOfTileImg = "../assets/back-of-tile.png";
+
 // AT LANDING PAGE
 
-import { playerDetails } from "./setup.js";
+import { playerDetails, unrevealedTiles } from "./setup.js";
 
 // PLAYER PRESS START
 document.querySelector("#start-button").addEventListener("click", () => {
@@ -48,9 +50,28 @@ function populatePlayersHand() {
     newImg.height = 25;
     specialTiles.appendChild(newImg);
   }
-
-  // populate outside hand
-  // populate special tiles
 }
 
-export { populateUnrevealedTable, populatePlayersHand };
+function populateOpponentHands() {
+  // start from 2nd hand, populate the tiles in hand
+  for (let i = 2; i <= playerDetails.length; i++) {
+    const opponentHands = document.querySelector(`#unrevealed-tiles${i}`);
+    const nameOfPlayer = document.querySelector(`#result${i}`).innerText;
+    console.log(nameOfPlayer);
+    const playerIdx = playerDetails.findIndex(
+      (obj) => obj.playerName === nameOfPlayer
+    );
+    console.log(playerIdx);
+    const tileCount = playerDetails[playerIdx].tilesInHand.length;
+    console.log(tileCount);
+    for (let j = 0; j < tileCount; j++) {
+      const newImg = document.createElement("img");
+      newImg.src = backOfTileImg;
+      newImg.alt = "rear of tile";
+      newImg.height = 40;
+      opponentHands.appendChild(newImg);
+    }
+  }
+}
+
+export { populateUnrevealedTable, populatePlayersHand, populateOpponentHands };
